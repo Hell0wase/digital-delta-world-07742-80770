@@ -144,6 +144,8 @@ export const Desktop = ({ userData: initialUserData, onLogout }: DesktopProps) =
         currentTime={currentTime}
         timezone={userData.user.timezone}
         onStartClick={() => setShowStartMenu(!showStartMenu)}
+        taskbarColor={userData.user.settings.taskbarColor}
+        themeMode={userData.user.settings.themeMode}
       />
     </div>
   );

@@ -16,6 +16,8 @@ export interface User {
     pinEnabled: boolean;
     pin?: string;
     pinLength: 4 | 6;
+    themeMode: 'dark' | 'light';
+    taskbarColor: string;
   };
 }
 

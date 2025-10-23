@@ -52,6 +52,26 @@ export const SettingsApp = ({ userData }: SettingsAppProps) => {
     }, 1000);
   };
 
+  const applyThemePreset = (mode: 'dark' | 'light') => {
+    const presets = {
+      dark: {
+        backgroundColor: '#1a1a2e',
+        taskbarColor: '#0a0a0f',
+      },
+      light: {
+        backgroundColor: '#f0f4f8',
+        taskbarColor: '#ffffff',
+      },
+    };
+    
+    setSettings({
+      ...settings,
+      themeMode: mode,
+      backgroundColor: presets[mode].backgroundColor,
+      taskbarColor: presets[mode].taskbarColor,
+    });
+  };
+
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -74,6 +94,31 @@ export const SettingsApp = ({ userData }: SettingsAppProps) => {
       </div>
 
       <div className="space-y-6 bg-muted/30 rounded-xl p-6">
+        <div className="space-y-2">
+          <Label htmlFor="themeMode">Theme Mode</Label>
+          <div className="flex gap-2">
+            <Button
+              type="button"
+              variant={settings.themeMode === 'dark' ? 'default' : 'outline'}
+              onClick={() => applyThemePreset('dark')}
+              className="flex-1"
+            >
+              🌙 Dark
+            </Button>
+            <Button
+              type="button"
+              variant={settings.themeMode === 'light' ? 'default' : 'outline'}
+              onClick={() => applyThemePreset('light')}
+              className="flex-1"
+            >
+              ☀️ Light
+            </Button>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            This will update background and taskbar colors
+          </p>
+        </div>
+
         <div className="space-y-2">
           <Label htmlFor="fontSize">Font Size ({settings.fontSize}px)</Label>
           <Input
@@ -106,6 +151,16 @@ export const SettingsApp = ({ userData }: SettingsAppProps) => {
             type="color"
             value={settings.backgroundColor}
             onChange={(e) => setSettings({ ...settings, backgroundColor: e.target.value })}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="taskbarColor">Taskbar Color</Label>
+          <Input
+            id="taskbarColor"
+            type="color"
+            value={settings.taskbarColor}
+            onChange={(e) => setSettings({ ...settings, taskbarColor: e.target.value })}
           />
         </div>
 

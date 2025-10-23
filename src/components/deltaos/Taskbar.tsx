@@ -12,6 +12,8 @@ interface TaskbarProps {
   currentTime: Date;
   timezone: string;
   onStartClick: () => void;
+  taskbarColor: string;
+  themeMode: 'dark' | 'light';
 }
 
 export const Taskbar = ({
@@ -20,12 +22,24 @@ export const Taskbar = ({
   currentTime,
   timezone,
   onStartClick,
+  taskbarColor,
+  themeMode,
 }: TaskbarProps) => {
   const formattedTime = formatInTimeZone(currentTime, timezone, 'h:mm a');
   const formattedDate = formatInTimeZone(currentTime, timezone, 'M/d/yyyy');
 
+  const textColor = themeMode === 'dark' ? '#ffffff' : '#000000';
+  const borderColor = themeMode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
+
   return (
-    <div className="fixed bottom-0 left-0 right-0 h-12 bg-background/80 backdrop-blur-3xl border-t border-border/60 flex items-center justify-center px-3 z-50 shadow-lg animate-slide-up">
+    <div 
+      className="fixed bottom-0 left-0 right-0 h-12 backdrop-blur-3xl flex items-center justify-center px-3 z-50 shadow-lg animate-slide-up"
+      style={{
+        backgroundColor: taskbarColor + 'cc',
+        borderTop: `1px solid ${borderColor}`,
+        color: textColor,
+      }}
+    >
       {/* Start Button */}
       <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center gap-1 bg-background/50 backdrop-blur-sm rounded-xl p-1 shadow-sm">
         <Button

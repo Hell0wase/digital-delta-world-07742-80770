@@ -70,5 +70,7 @@ export const getDefaultUser = (): User => ({
     backgroundColor: '#1a1a2e',
     pinEnabled: false,
     pinLength: 4,
+    themeMode: 'dark',
+    taskbarColor: '#0a0a0f',
   },
 });
