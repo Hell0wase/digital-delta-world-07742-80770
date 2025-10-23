@@ -21,6 +21,7 @@ interface WindowProps {
   onUpdateSize: (id: string, size: { width: number; height: number }) => void;
   userData: OSData;
   roundedCorners: boolean;
+  themeMode: 'dark' | 'light';
 }
 
 export const Window = ({
@@ -33,6 +34,7 @@ export const Window = ({
   onUpdateSize,
   userData,
   roundedCorners,
+  themeMode,
 }: WindowProps) => {
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
@@ -113,20 +115,33 @@ export const Window = ({
         borderRadius: roundedCorners ? '12px' : '0px',
       };
 
+  const windowBg = themeMode === 'dark' ? '#1a1a2e' : '#ffffff';
+  const windowText = themeMode === 'dark' ? '#ffffff' : '#000000';
+  const borderColor = themeMode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
+  const titleBarBg = themeMode === 'dark' ? 'rgba(26,26,46,0.8)' : 'rgba(255,255,255,0.8)';
+
   return (
     <div
       ref={windowRef}
-      className="absolute bg-background/95 backdrop-blur-2xl border border-border/50 shadow-2xl overflow-hidden animate-scale-in"
+      className="absolute backdrop-blur-2xl shadow-2xl overflow-hidden animate-scale-in"
       style={{
         ...style,
         zIndex: win.zIndex,
+        backgroundColor: windowBg,
+        color: windowText,
+        border: `1px solid ${borderColor}`,
         boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
       }}
       onMouseDown={() => onFocus(win.id)}
     >
       {/* Title Bar */}
       <div
-        className="h-8 bg-background/50 backdrop-blur-xl border-b border-border/30 flex items-center justify-between px-3 cursor-move"
+        className="h-8 backdrop-blur-xl flex items-center justify-between px-3 cursor-move"
+        style={{
+          backgroundColor: titleBarBg,
+          borderBottom: `1px solid ${borderColor}`,
+          color: windowText,
+        }}
         onMouseDown={handleMouseDown}
       >
         <div className="flex items-center gap-2">
@@ -136,21 +151,42 @@ export const Window = ({
         <div className="flex items-center gap-2">
           <button
             onClick={() => onMinimize(win.id)}
-            className="w-8 h-6 flex items-center justify-center hover:bg-muted/50 rounded transition-colors"
+            className="w-8 h-6 flex items-center justify-center rounded transition-colors"
+            style={{
+              color: windowText,
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = themeMode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
             aria-label="Minimize"
           >
-            <div className="w-3 h-0.5 bg-foreground" />
+            <div className="w-3 h-0.5" style={{ backgroundColor: windowText }} />
           </button>
           <button
             onClick={() => onMaximize(win.id)}
-            className="w-8 h-6 flex items-center justify-center hover:bg-muted/50 rounded transition-colors"
+            className="w-8 h-6 flex items-center justify-center rounded transition-colors"
+            style={{
+              color: windowText,
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = themeMode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
             aria-label="Maximize"
           >
-            <div className="w-3 h-3 border border-foreground" />
+            <div className="w-3 h-3" style={{ border: `1px solid ${windowText}` }} />
           </button>
           <button
             onClick={() => onClose(win.id)}
-            className="w-8 h-6 flex items-center justify-center hover:bg-destructive hover:text-destructive-foreground rounded transition-colors"
+            className="w-8 h-6 flex items-center justify-center rounded transition-colors"
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#ef4444';
+              e.currentTarget.style.color = '#ffffff';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'transparent';
+              e.currentTarget.style.color = windowText;
+            }}
+            style={{
+              color: windowText,
+            }}
             aria-label="Close"
           >
             <span className="text-lg leading-none">×</span>
@@ -159,7 +195,7 @@ export const Window = ({
       </div>
 
       {/* Content */}
-      <div className="h-[calc(100%-2rem)] overflow-auto bg-background">
+      <div className="h-[calc(100%-2rem)] overflow-auto" style={{ backgroundColor: windowBg, color: windowText }}>
         {renderApp()}
       </div>
     </div>

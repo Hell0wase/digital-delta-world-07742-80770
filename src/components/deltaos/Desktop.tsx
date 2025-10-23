@@ -118,6 +118,7 @@ export const Desktop = ({ userData: initialUserData, onLogout }: DesktopProps) =
           onUpdateSize={updateSize}
           userData={userData}
           roundedCorners={userData.user.settings.roundedCorners}
+          themeMode={userData.user.settings.themeMode}
         />
       ))}
 
