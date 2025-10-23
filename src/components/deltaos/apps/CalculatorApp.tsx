@@ -1,7 +1,11 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 
-export const CalculatorApp = () => {
+interface CalculatorAppProps {
+  themeMode: 'dark' | 'light';
+}
+
+export const CalculatorApp = ({ themeMode }: CalculatorAppProps) => {
   const [display, setDisplay] = useState('0');
   const [previousValue, setPreviousValue] = useState<number | null>(null);
   const [operation, setOperation] = useState<string | null>(null);
@@ -69,20 +73,35 @@ export const CalculatorApp = () => {
       <div className="space-y-3">
         {buttons.map((row, i) => (
           <div key={i} className="flex gap-3">
-            {row.map((btn) => (
-              <Button
-                key={btn}
-                onClick={() => {
-                  if (btn === '=') handleEquals();
-                  else if (['+', '-', '*', '/'].includes(btn)) handleOperation(btn);
-                  else handleNumber(btn);
-                }}
-                className="flex-1 h-16 text-2xl font-light rounded-xl"
-                variant={['+', '-', '*', '/', '='].includes(btn) ? 'default' : 'outline'}
-              >
-                {btn}
-              </Button>
-            ))}
+            {row.map((btn) => {
+              const isOperator = ['+', '-', '*', '/', '='].includes(btn);
+              const buttonStyle = themeMode === 'dark' 
+                ? { 
+                    backgroundColor: isOperator ? '#4a5568' : 'transparent',
+                    color: '#ffffff',
+                    border: isOperator ? 'none' : '1px solid rgba(255,255,255,0.2)'
+                  }
+                : {
+                    backgroundColor: isOperator ? '#e2e8f0' : 'transparent',
+                    color: '#000000',
+                    border: isOperator ? 'none' : '1px solid rgba(0,0,0,0.2)'
+                  };
+              
+              return (
+                <Button
+                  key={btn}
+                  onClick={() => {
+                    if (btn === '=') handleEquals();
+                    else if (['+', '-', '*', '/'].includes(btn)) handleOperation(btn);
+                    else handleNumber(btn);
+                  }}
+                  className="flex-1 h-16 text-2xl font-light rounded-xl"
+                  style={buttonStyle}
+                >
+                  {btn}
+                </Button>
+              );
+            })}
           </div>
         ))}
         <Button onClick={handleClear} variant="destructive" className="w-full h-16 text-xl rounded-xl">

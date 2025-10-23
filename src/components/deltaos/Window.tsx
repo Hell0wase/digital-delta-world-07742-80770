@@ -83,7 +83,7 @@ export const Window = ({
       case 'settings':
         return <SettingsApp userData={userData} />;
       case 'calculator':
-        return <CalculatorApp />;
+        return <CalculatorApp themeMode={themeMode} />;
       case 'ai':
         return <AIApp />;
       case 'browser':
